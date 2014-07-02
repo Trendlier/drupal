@@ -1,0 +1,4 @@
+name = Platform
+description = Trendlier platform hooks
+package = Platform
+core = 7.x
