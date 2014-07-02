@@ -1,0 +1,4 @@
+name = Platform
+description = Themes (templates) for Trendlier platform
+core = 7.x
+stylesheets[all][] = style.css
