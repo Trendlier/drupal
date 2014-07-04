@@ -13,7 +13,7 @@ function word_count_paginate($str, $page_size, $page_number)
         );
 }
 
-function paginate_text(&$text, $page_size)
+function paginate_text($text, $page_size)
 {
     if (array_key_exists('page', $_GET))
     {
@@ -25,4 +25,5 @@ function paginate_text(&$text, $page_size)
                 $page_number
             );
     }
+    return $text;
 }
