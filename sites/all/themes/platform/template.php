@@ -1,5 +1,7 @@
 <?php
 
+require_once('config.inc.php');
+
 /**
  * Override or insert variables into the maintenance page template.
  */
@@ -24,7 +26,12 @@ function platform_preprocess_html(&$vars) {
   drupal_add_css(path_to_theme() . '/ie6.css', array('group' => CSS_THEME, 'browsers' => array('IE' => 'lte IE 6', '!IE' => FALSE), 'weight' => 999, 'preprocess' => FALSE));
 
   // Find out if there is a node. If so, use HTML template just for nodes.
-  if ($node = menu_get_object())
+  global $PLATFORM_SIMPLE_HTML_NODE_TYPES;
+  $node = menu_get_object();
+  if (
+    is_object($node) &&
+    in_array($node->type, $PLATFORM_SIMPLE_HTML_NODE_TYPES)
+  )
   {
     $vars['theme_hook_suggestions'][] = 'html__node__view';
   }
@@ -128,3 +135,5 @@ function platform_css_alter(&$css) {
     $css['misc/ui/jquery.ui.theme.css']['type'] = 'file';
   }
 }
+
+// vim:tabstop=2:expandtab:shiftwidth=2
