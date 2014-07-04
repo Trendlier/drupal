@@ -13,6 +13,13 @@ $field_text = paginate_field_text($node, 'field_text', 30);
 $field_subtitle = get_field_text($node, 'field_subtitle');
 $field_subtitle = $field_subtitle ? $field_subtitle : $node->title;
 
+/**
+ * Get field product
+ */
+$product_nid = get_field_node_reference($node, 'field_product');
+$product_node = node_load($product_nid);
+$product_image_url = get_field_image_url($product_node, 'field_image');
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -29,7 +36,7 @@ $field_subtitle = $field_subtitle ? $field_subtitle : $node->title;
     <body>
         <div style="margin: auto; width: 296px;">
         <div style="height:160px;overflow:hidden">
-            <!-- TODO: put IMG here -->
+            <img width="296px" src="<?php print $product_image_url; ?>" />
         </div>
         <div style="width: 284px">
             <h1><?php print $field_subtitle; ?></h1>
