@@ -22,6 +22,12 @@ function platform_preprocess_html(&$vars) {
   drupal_add_css(path_to_theme() . '/ie7.css', array('group' => CSS_THEME, 'browsers' => array('IE' => 'lte IE 7', '!IE' => FALSE), 'weight' => 999, 'preprocess' => FALSE));
   // Add conditional CSS for IE6.
   drupal_add_css(path_to_theme() . '/ie6.css', array('group' => CSS_THEME, 'browsers' => array('IE' => 'lte IE 6', '!IE' => FALSE), 'weight' => 999, 'preprocess' => FALSE));
+
+  // Find out if there is a node. If so, use HTML template just for nodes.
+  if ($node = menu_get_object())
+  {
+    $vars['theme_hook_suggestions'][] = 'html__node__view';
+  }
 }
 
 /**
@@ -34,6 +40,12 @@ function platform_preprocess_page(&$vars) {
     '#theme' => 'menu_local_tasks',
     '#secondary' => $vars['tabs']['#secondary'],
   );
+
+  // Set template based on node type
+  if (isset($vars['node']->type))
+  {
+    $vars['theme_hook_suggestions'][] = 'page__node__' . $vars['node']->type;
+  }
 }
 
 /**
