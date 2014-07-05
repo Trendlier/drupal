@@ -58,13 +58,21 @@ $product_image_url = get_field_image_url($product_node, 'field_image');
                 position: relative;
                 top: -<?php print $page_offset; ?>px;
             }
+            .product_img_container {
+                max-height: 148px;
+                overflow: hidden;
+            }
+            .product_img {
+                max-width: 296px;
+                height: auto;
+            }
         </style>
     </head>
     <body>
         <div class="page_container">
             <div class="page_offset_container">
-                <div style="height:148px;overflow:hidden">
-                    <img width="296px" src="<?php print $product_image_url; ?>" />
+                <div class="product_img_container">
+                    <img class="product_img" src="<?php print $product_image_url; ?>" />
                 </div>
                 <div style="width: 284px">
                     <h1><?php print $field_subtitle; ?></h1>
