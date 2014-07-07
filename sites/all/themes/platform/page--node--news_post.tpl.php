@@ -1,9 +1,14 @@
 <?php
 
-require_once('field_fun.php');
+module_load_include('php', 'platform', 'node_fun');
 
 /**
  * Determine page dimensions
+ *
+ * TODO: Move this into its own JS module that handles pagination using
+ * jQuery by finding the offset height of the content within the window.
+ * The JS should also not display a line at the bottom if it will be cut off,
+ * and be smart enough to display that very line on the next page.
  */
 if (array_key_exists('page', $_GET))
 {
@@ -17,35 +22,21 @@ else
     $page_height = 342;
 }
 
-/**
- * Get field text
- */
-$field_text = get_field_text($node, 'field_text');
-
-/**
- * Get field subtitle
- */
-$field_subtitle = get_field_text($node, 'field_subtitle');
-$field_subtitle = $field_subtitle ? $field_subtitle : $node->title;
-
-/**
- * Get field product
- */
-$product_nid = get_field_node_reference($node, 'field_product');
-$product_node = node_load($product_nid);
-$product_image_url = get_field_image_url($product_node, 'field_image');
-
+$news_post = platform_get_news_post($node);
 ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title><?php print $node->title; ?></title>
-        <meta name="description" content="<?php print $field_subtitle; ?>">
+        <title><?php print $news_post->title; ?></title>
+        <meta name="description" content="<?php print $news_post->subtitle; ?>">
+        <!-- TODO: Move the page_container CSS into the same JS module for
+                   for automatic pagination. -->
         <style type="text/css">
             h1 {font-family: RionaSans-Bold;font-size: 18px;line-height: 19px;}
             p {font-family: RionaSans-Regular;font-size: 12px;}
+
             .page_container {
                 position: relative;
                 overflow: hidden;
@@ -72,11 +63,11 @@ $product_image_url = get_field_image_url($product_node, 'field_image');
         <div class="page_container">
             <div class="page_offset_container">
                 <div class="product_img_container">
-                    <img class="product_img" src="<?php print $product_image_url; ?>" />
+                    <img class="product_img" src="<?php print $news_post->product_image_url; ?>" />
                 </div>
                 <div style="width: 284px">
-                    <h1><?php print $field_subtitle; ?></h1>
-                    <p><?php print $field_text; ?></p>
+                    <h1><?php print $news_post->subtitle; ?></h1>
+                    <p><?php print $news_post->text; ?></p>
                 </div>
             </div>
         </div>
