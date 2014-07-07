@@ -66,7 +66,7 @@ $news_post = platform_get_news_post($node);
                     <img class="product_img" src="<?php print $news_post->product_image_url; ?>" />
                 </div>
                 <div style="width: 284px">
-                    <h1><?php print $news_post->subtitle; ?></h1>
+                    <h1><?php print $news_post->subtitle ? $news_post->subtitle : $news_post->title; ?></h1>
                     <p><?php print $news_post->text; ?></p>
                 </div>
             </div>

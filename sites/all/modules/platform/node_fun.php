@@ -4,12 +4,7 @@ function platform_get_news_post($node)
 {
     $news_post = new stdClass();
     $news_post->title = $node->title;
-
     $news_post->subtitle = get_field_text($node, 'field_subtitle');
-    $news_post->subtitle = (
-        $news_post->subtitle ?
-        $news_post->subtitle : $node->title);
-
     $news_post->text = get_field_text($node, 'field_text');
 
     $product_nid = get_field_node_reference($node, 'field_product');
