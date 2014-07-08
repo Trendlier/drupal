@@ -1,3 +1,11 @@
+<?php
+if (isset($node))
+{
+    print '<pre>';
+    var_dump($node);
+    print '</pre>';
+}
+?>
 
   <div id="branding" class="clearfix">
     <?php print $breadcrumb; ?>
