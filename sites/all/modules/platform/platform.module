@@ -66,31 +66,52 @@ function platform_add_category_form_submit($form, &$form_state)
     }
 }
 
-function platform_insert_news_post($node)
+function platform_insert_product($node)
 {
-    if ($node->type != 'news_post')
+    if ($node->type != 'product')
     {
         return;
     }
 
+    $product = platform_get_product($node);
+
     db_set_active('platform');
 
-    $id = db_insert('news_post')
+    $now = new DateTime('now', new DateTimeZone('UTC'));
+
+    $id = db_insert('product')
         ->fields(array(
-            
+            'title' => $product->title,
+            'category_id' => $product->category_id,
+            'subtitle' => $product->subtitle,
+            'image_url' => $product->image_url,
+            'image_width' => $product->image_width,
+            'image_height' => $product->image_height,
+            'description' => $product->description,
+            'is_hidden' => $product->is_hidden,
+            'created_utc' => $now->format('c'),
         ))
         ->execute();
 
     db_set_active();
 
-    return $id;
+    drupal_set_message(
+            'Added ' . $product->title . ' ' .
+            '(ID ' . $id . ')');
+
+    db_insert('platform.product_node')
+        ->fields(array(
+            'product_id' => $id,
+            'node_id' => $node->nid
+        ))
+        ->execute();
 }
 
 function platform_node_insert($node)
 {
     try
     {
-        platform_node_insert_news_post($node);
+        platform_insert_product($node);
     }
     catch (Exception $e)
     {

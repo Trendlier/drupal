@@ -11,10 +11,14 @@ function platform_get_product($node)
 {
     $product = new stdClass();
     $product->title = $node->title;
+    $product->category_id = get_field_value($node, 'field_category');
     $product->subtitle = get_field_text($node, 'field_subtitle');
-    $news_post->image_url = get_field_image_url($node, 'field_image');
+    $product->image_url = get_field_image_url($node, 'field_image');
+    $product->image_width = get_field_value($node, 'field_image_width');
+    $product->image_height = get_field_value($node, 'field_image_height');
     $product->description = get_field_text($node, 'field_description');
     $product->is_hidden = get_field_text($node, 'field_hidden');
+    return $product;
 }
 
 function platform_get_news_post($node)
@@ -23,6 +27,7 @@ function platform_get_news_post($node)
     $news_post->title = $node->title;
     $news_post->subtitle = get_field_text($node, 'field_subtitle');
     $news_post->text = get_field_text($node, 'field_text');
+    $news_post->body = $node->body;
 
     $product_nid = get_field_node_reference($node, 'field_product');
     $product_node = node_load($product_nid);
@@ -52,6 +57,16 @@ function get_field_text($node, $field_name)
     return $field_text;
 }
 
+function get_field_value($node, $field_name)
+{
+    $items = field_get_items('node', $node, $field_name);
+    foreach ($items as &$item)
+    {
+        return $item['value'];
+    }
+    throw Exception('Expected value in ' . $field_name);
+}
+
 /**
  * @return $nid of referred node
  */
@@ -70,7 +85,13 @@ function get_field_image_url($node, $field_name)
     $field_items = field_get_items('node', $node, $field_name);
     foreach ($field_items as $item)
     {
-        return file_create_url($item['uri']);
+        if (array_key_exists('fid', $item))
+        {
+            $file = file_load($item['fid']);
+            return file_create_url($file->uri);
+        }
     }
-    throw new Exception('Unexpected error');
+    throw new Exception(
+        'fid missing on ' . $node->nid . '/' . $field_name . ' ' .
+        'or URI missing on file');
 }
