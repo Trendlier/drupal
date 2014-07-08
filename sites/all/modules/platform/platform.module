@@ -1,5 +1,128 @@
 <?php
 
+module_load_include('php', 'platform', 'node_fun');
+
 /**
  * Trendlier platform hooks for Drupal
  */
+
+function platform_menu()
+{
+    return array(
+        'platform/test' => array(
+            'title' => t('Add Category'),
+            'page callback' => 'fjdkslfj_test',
+            'access callback' => TRUE,
+        ),
+        'platform/add_category_form' => array(
+            'title' => t('Add Category'),
+            'page callback' => 'drupal_get_form',
+            'page arguments' => array('platform_add_category_form'),
+            'access callback' => TRUE,
+            'description' => t('Add Category'),
+            'type' => MENU_LOCAL_TASK,
+        ),
+    );
+}
+
+function fjdkslfj_test()
+{
+    return 'hello world';
+}
+
+function platform_add_category_form($form)
+{
+    return array(
+        'name' => array(
+            '#type' => 'textfield',
+            '#title' => t('Name'),
+            '#required' => TRUE,
+            '#default_value' => '',
+            '#description' => 'Name of category in Trendlier app',
+            '#size' => 20,
+            '#maxlength' => 20,
+        ),
+    );
+}
+
+function platform_add_category_form_submit($form, &$form_state)
+{
+    print '<pre>';
+    var_dump($form, $form_state);
+    print '</pre>';
+}
+
+function platform_insert_category($node)
+{
+    if ($node->type != 'category')
+    {
+        return;
+    }
+
+    db_set_active('platform');
+
+    $category = platform_get_category($node);
+    $id = db_insert('category')
+        ->fields(array(
+            'name' => $category->name,
+        ))
+        ->execute();
+
+    db_set_active();
+
+    // Record the relationship between this node and this category
+    db_insert('category_node')
+        ->fields(array(
+            'category_id' => $id,
+            'node_id' => $node->nid,
+        ))
+        ->execute();
+}
+
+function platform_insert_product($node)
+{
+}
+
+function platform_insert_news_post($node)
+{
+}
+
+function platform_insert_review($node)
+{
+    if ($node->type != 'review')
+    {
+        return;
+    }
+
+    db_set_active('platform');
+
+    $id = db_insert('review')
+        ->fields(array(
+            
+        ))
+        ->execute();
+
+    db_set_active();
+
+    return $id;
+}
+
+//function platform_insert_quiz($node)
+//{
+//}
+
+function platform_node_insert($node)
+{
+    try
+    {
+        platform_node_insert_category($node);
+        platform_node_insert_product($node);
+        platform_node_insert_review($node);
+        platform_node_insert_news_post($node);
+        //platform_node_insert_quiz($node);
+    }
+    catch (Exception $e)
+    {
+        drupal_set_message($e->getMessage(), 'error');
+    }
+}

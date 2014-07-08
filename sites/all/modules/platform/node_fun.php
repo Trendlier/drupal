@@ -1,5 +1,22 @@
 <?php
 
+function platform_get_category($node)
+{
+    $category = new stdClass();
+    $category->name = $node->title;
+    return $category;
+}
+
+function platform_get_product($node)
+{
+    $product = new stdClass();
+    $product->title = $node->title;
+    $product->subtitle = get_field_text($node, 'field_subtitle');
+    $news_post->image_url = get_field_image_url($node, 'field_image');
+    $product->description = get_field_text($node, 'field_description');
+    $product->is_hidden = get_field_text($node, 'field_hidden');
+}
+
 function platform_get_news_post($node)
 {
     $news_post = new stdClass();
@@ -13,6 +30,15 @@ function platform_get_news_post($node)
         get_field_image_url($product_node, 'field_image');
 
     return $news_post;
+}
+
+function platform_get_review($node)
+{
+    $review = new stdClass();
+    $review->title = $node->title;
+    $review->subtitle = get_field_text($node, 'field_subtitle');
+    $review->review_text = get_field_text($node, 'field_text');
+    $review->stars = get_field_text($node, 'field_stars');
 }
 
 function get_field_text($node, $field_name)
