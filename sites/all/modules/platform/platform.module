@@ -10,12 +10,11 @@ function platform_menu()
 {
     return array(
         'platform/add_category_form' => array(
-            'title' => t('Add Category'),
+            'title' => 'Add Category',
             'page callback' => 'drupal_get_form',
             'page arguments' => array('platform_add_category_form'),
             'access callback' => TRUE,
-            'description' => t('Add Category'),
-            'type' => MENU_LOCAL_TASK,
+            'type' => MENU_NORMAL_ITEM,
         ),
     );
 }
