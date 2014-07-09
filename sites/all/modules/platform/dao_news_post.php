@@ -95,7 +95,7 @@ function platform_db_news_post_id_get($nid)
     }
     else
     {
-        throw Exception('News post for node ' . $nid . ' not in platform DB!');
+        throw new Exception('News post for node ' . $nid . ' not in platform DB!');
     }
 }
 

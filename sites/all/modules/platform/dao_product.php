@@ -94,7 +94,8 @@ function platform_db_product_id_get($nid)
     }
     else
     {
-        throw Exception('Product for node ' . $nid . ' not in platform DB!');
+        throw new Exception(
+            'Product for node ' . $nid . ' not in platform DB!');
     }
 }
 
