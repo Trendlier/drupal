@@ -35,6 +35,64 @@ function platform_node_news_post_get($node)
     return $news_post;
 }
 
+function platform_node_quiz_get($node)
+{
+    $quiz = new stdClass();
+    $quiz->nid = $node->nid;
+    $quiz->quiz_type_id = get_field_value($node, 'field_quiz_type');
+    $quiz->category_id = get_field_value($node, 'field_category');
+    $quiz->title = $node->title;
+    $quiz->total_points = get_field_value($node, 'field_total_points');
+
+    $quiz->questions = platform_entity_quiz_questions_get($node);
+
+    return $quiz;
+}
+
+function platform_entity_quiz_questions_get($node)
+{
+    $question_items =
+        get_field_collection_items($node, 'field_quiz_questions');
+    $questions = array();
+    foreach ($question_items as $question_item)
+    {
+        $questions[] = $question = new stdClass();
+        $question->text =
+            get_field_collection_item_value($question_item, 'field_text');
+
+        $question->possible_answers =
+            platform_entity_quiz_possible_answers_get($question_item);
+    }
+
+    return $questions;
+}
+
+function platform_entity_quiz_possible_answers_get(
+    $question_field_collection_item
+)
+{
+    $answer_items =
+        get_field_collection_items(
+            $question_field_collection_item,
+            'field_quiz_q_possible_answers',
+            true
+        );
+    $possible_answers = array();
+    foreach ($answer_items as $answer_item)
+    {
+        $possible_answers[] = $answer = new stdClass();
+        $answer->text =
+            get_field_collection_item_value(
+                $answer_item,
+                'field_answer_text'
+            );
+        $answer->points =
+            get_field_collection_item_value($answer_item, 'field_points');
+    }
+
+    return $possible_answers;
+}
+
 function get_field_text($node, $field_name)
 {
     $field_text_items = field_get_items('node', $node, $field_name);
@@ -53,7 +111,7 @@ function get_field_value($node, $field_name)
     {
         return $item['value'];
     }
-    throw Exception('Expected value in ' . $field_name);
+    throw new Exception('Expected value in ' . $field_name);
 }
 
 /**
@@ -83,4 +141,40 @@ function get_field_image_url($node, $field_name)
     throw new Exception(
         'fid missing on ' . $node->nid . '/' . $field_name . ' ' .
         'or URI missing on file');
+}
+
+function get_field_collection_items(
+    $entity,
+    $field_name,
+    $field_collection=false
+)
+{
+    if ($field_collection)
+    {
+        $field_items = field_get_items(
+            'field_collection_item', $entity, $field_name);
+    }
+    else
+    {
+        $field_items = field_get_items('node', $entity, $field_name);
+    }
+    $field_collection_items = array();
+    foreach ($field_items as $item_id)
+    {
+        $field_collection_items[] =
+            field_collection_field_get_entity($item_id);
+    }
+
+    return $field_collection_items;
+}
+
+function get_field_collection_item_value($field_collection_item, $field_name)
+{
+    $items = field_get_items(
+        'field_collection_item', $field_collection_item, $field_name);
+    foreach ($items as &$item)
+    {
+        return $item['value'];
+    }
+    throw new Exception('Expected value in ' . $field_name);
 }

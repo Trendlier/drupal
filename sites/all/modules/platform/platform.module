@@ -3,6 +3,7 @@
 module_load_include('php', 'platform', 'dao_category');
 module_load_include('php', 'platform', 'dao_product');
 module_load_include('php', 'platform', 'dao_news_post');
+module_load_include('php', 'platform', 'dao_quiz');
 module_load_include('php', 'platform', 'node_fun');
 
 /**
@@ -82,6 +83,9 @@ function platform_node_insert($node)
             case 'news_post':
                 $news_post = platform_node_news_post_get($node);
                 platform_db_news_post_add($news_post);
+            case 'quiz':
+                $quiz = platform_node_quiz_get($node);
+                platform_db_quiz_add($quiz);
             default:
                 break;
         }
@@ -109,6 +113,10 @@ function platform_node_update($node)
                 $news_post = platform_node_news_post_get($node);
                 platform_db_news_post_edit($news_post);
                 break;
+            case 'quiz':
+                $quiz = platform_node_quiz_get($node);
+                platform_db_quiz_edit($quiz);
+                break;
             default:
                 break;
         }
@@ -132,6 +140,9 @@ function platform_node_delete($node)
                 platform_db_product_remove($node);
                 break;
             case 'news_post':
+                platform_db_news_post_remove($node);
+                break;
+            case 'quiz':
                 platform_db_news_post_remove($node);
                 break;
             default:
