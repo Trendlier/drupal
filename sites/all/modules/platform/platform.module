@@ -4,6 +4,8 @@ module_load_include('php', 'platform', 'dao_category');
 module_load_include('php', 'platform', 'dao_product');
 module_load_include('php', 'platform', 'dao_news_post');
 module_load_include('php', 'platform', 'dao_quiz');
+module_load_include('php', 'platform', 'dao_quiz_question');
+module_load_include('php', 'platform', 'dao_quiz_possible_answer');
 module_load_include('php', 'platform', 'node_fun');
 
 /**
@@ -146,7 +148,7 @@ function platform_node_delete($node)
                 platform_db_news_post_remove($node);
                 break;
             case 'quiz':
-                platform_db_news_post_remove($node);
+                platform_db_quiz_remove($node);
                 break;
             default:
                 break;

@@ -17,29 +17,27 @@ function platform_db_quiz_add($quiz)
 
     foreach ($quiz->questions as $question)
     {
-        $question_id = platform_db_quiz_question_insert($question, $quiz_id);
-        drupal_set_message('Added Quiz Question (ID ' . $question_id . ')');
-        platform_db_quiz_question_entity($question_id, $question->entity_id);
-
-        foreach ($question->possible_answers as $answer)
-        {
-            $answer_id =
-                platform_db_quiz_possible_answer_insert($answer, $question_id);
-            drupal_set_message(
-                'Added Quiz Possible Answer ' .
-                '(ID ' . $answer_id . ')');
-            platform_db_quiz_possible_answer_entity(
-                $answer_id, $answer->entity_id);
-        }
+        platform_db_quiz_question_add($question, $quiz_id);
     }
 }
 
 function platform_db_quiz_edit($quiz)
 {
+    $id = platform_db_quiz_id_get($quiz->nid);
+
+    platform_db_quiz_update($id, $quiz);
+
+    drupal_set_message('Updated ' . $quiz->title . ' (ID ' . $id . ')');
 }
 
 function platform_db_quiz_remove($node)
 {
+    $id = platform_db_quiz_id_get($node->nid);
+
+    platform_db_quiz_node_delete($id, $node->nid);
+    platform_db_quiz_delete($id);
+
+    drupal_set_message('Deleted the quiz (ID ' . $id . ')');
 }
 
 function platform_db_quiz_insert($quiz)
@@ -78,68 +76,67 @@ function platform_db_quiz_node($id, $nid)
     db_set_active();
 }
 
-function platform_db_quiz_question_insert($question, $quiz_id)
+function platform_db_quiz_id_get($nid)
+{
+    db_set_active();
+
+    $record = db_select('platform.quiz_node', 'pn')
+        ->fields('pn')
+        ->condition('pn.node_id', $nid)
+        ->execute()
+        ->fetchObject();
+
+    db_set_active();
+
+    if (is_object($record))
+    {
+        return $record->quiz_id;
+    }
+    else
+    {
+        throw new Exception('Quiz for node ' . $nid . ' not in platform DB!');
+    }
+}
+
+function platform_db_quiz_update($id, $quiz)
 {
     db_set_active('platform');
 
-    $now = new DateTime('now', new DateTimeZone('UTC'));
-
-    $id = db_insert('quiz.question')
+    db_update('quiz.quiz')
         ->fields(array(
-            'quiz_id' => $quiz_id,
-            'question_text' => $question->text,
-            'created_utc' => $now->format('c'),
+            'type_id' => $quiz->type_id,
+            'category_id' => $quiz->category_id,
+            'name' => $quiz->title,
+            'total_points' => $quiz->total_points,
+            'is_hidden' => $quiz->is_hidden,
         ))
+        ->condition('id', $id)
         ->execute();
 
     db_set_active();
-
-    return $id;
 }
 
-function platform_db_quiz_question_entity($id, $entity_id)
+function platform_db_quiz_node_delete($id, $nid)
 {
     db_set_active();
 
-    db_insert('platform.quiz_question_entity')
-        ->fields(array(
-            'quiz_question_id' => $id,
-            'entity_id' => $entity_id,
-        ))
+    db_delete('platform.quiz_node')
+        ->condition('quiz_id', $id)
+        ->condition('node_id', $nid)
         ->execute();
 
     db_set_active();
 }
 
-function platform_db_quiz_possible_answer_insert($answer, $question_id)
+function platform_db_quiz_delete($id)
 {
     db_set_active('platform');
 
-    $now = new DateTime('now', new DateTimeZone('UTC'));
-
-    $id = db_insert('quiz.possible_answer')
+    db_update('quiz.quiz')
         ->fields(array(
-            'question_id' => $question_id,
-            'answer_text' => $answer->answer_text,
-            'points' => $answer->points,
-            'created_utc' => $now->format('c'),
+            'is_deleted' => true,
         ))
-        ->execute();
-
-    db_set_active();
-
-    return $id;
-}
-
-function platform_db_quiz_possible_answer_entity($id, $entity_id)
-{
-    db_set_active();
-
-    db_insert('platform.quiz_possible_answer_entity')
-        ->fields(array(
-            'quiz_possible_answer_id' => $id,
-            'entity_id' => $entity_id,
-        ))
+        ->condition('id', $id)
         ->execute();
 
     db_set_active();
