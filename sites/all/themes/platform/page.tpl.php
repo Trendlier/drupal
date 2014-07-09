@@ -1,30 +1,5 @@
 <?php
-if (isset($node))
-{
-    print '<pre>';
-    var_dump($node);
-    print '</pre>';
-}
-?>
-
-    <?php print render($page['header']); ?>
-
-    <?php if ($main_menu): ?>
-      <div id="main-menu" class="navigation">
-        <?php print theme('links__system_main_menu', array(
-          'links' => $main_menu,
-          'attributes' => array(
-            'id' => 'main-menu-links',
-            'class' => array('links', 'clearfix'),
-          ),
-          'heading' => array(
-            'text' => t('Main menu'),
-            'level' => 'h2',
-            'class' => array('element-invisible'),
-          ),
-        )); ?>
-      </div> <!-- /#main-menu -->
-    <?php endif; ?>
+    print render($page['header']); ?>
 
     <?php if ($secondary_menu): ?>
       <div id="secondary-menu" class="navigation">
