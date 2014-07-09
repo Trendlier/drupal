@@ -1,3 +1,6 @@
 <?php
 
-print $page;
+if (isset($page))
+{
+    print $page;
+}
