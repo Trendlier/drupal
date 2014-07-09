@@ -1,17 +1,11 @@
 <?php
 
-function platform_get_category($node)
-{
-    $category = new stdClass();
-    $category->name = $node->title;
-    return $category;
-}
-
-function platform_get_product($node)
+function platform_node_product_get($node)
 {
     $product = new stdClass();
-    $product->title = $node->title;
+    $product->nid = $node->nid;
     $product->category_id = get_field_value($node, 'field_category');
+    $product->title = $node->title;
     $product->subtitle = get_field_text($node, 'field_subtitle');
     $product->image_url = get_field_image_url($node, 'field_image');
     $product->image_width = get_field_value($node, 'field_image_width');
@@ -21,30 +15,24 @@ function platform_get_product($node)
     return $product;
 }
 
-function platform_get_news_post($node)
+function platform_node_news_post_get($node)
 {
     $news_post = new stdClass();
+    $news_post->nid = $node->nid;
+    $news_post->news_post_type_id =
+        get_field_value($node, 'field_news_post_type');
     $news_post->title = $node->title;
     $news_post->subtitle = get_field_text($node, 'field_subtitle');
     $news_post->text = get_field_text($node, 'field_text');
-    $news_post->body = $node->body;
+    $news_post->excerpt = get_field_text($node, 'field_excerpt');
     $news_post->is_hidden = get_field_value($node, 'field_hidden');
 
+    // Pull information about the product from the product node
     $product_nid = get_field_node_reference($node, 'field_product');
     $product_node = node_load($product_nid);
-    $news_post->product_image_url =
-        get_field_image_url($product_node, 'field_image');
+    $news_post->product = platform_node_product_get($product_node);
 
     return $news_post;
-}
-
-function platform_get_review($node)
-{
-    $review = new stdClass();
-    $review->title = $node->title;
-    $review->subtitle = get_field_text($node, 'field_subtitle');
-    $review->review_text = get_field_text($node, 'field_text');
-    $review->stars = get_field_text($node, 'field_stars');
 }
 
 function get_field_text($node, $field_name)

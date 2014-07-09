@@ -1,11 +1,43 @@
 <?php
 
 /**
- * IMPORTANT: YOU MUST END EVERY DB FUNCTION WITH db_set_active(),
- * ELSE FUTURE DB CALLS MAY UNWITTINGLY USE THE WRONG DATABASE.
+ * IMPORTANT: YOU MUST END EVERY QUERY FUNCTION WITH db_set_active(),
+ * ELSE FUTURE QUERIES MAY UNWITTINGLY USE THE WRONG DATABASE.
  */
 
 function platform_db_product_add($product)
+{
+    $id = platform_db_product_insert($product);
+
+    drupal_set_message(
+            'Added ' . $product->title . ' ' .
+            '(ID ' . $id . ')');
+
+    platform_db_product_node($id, $product->nid);
+}
+
+function platform_db_product_edit($product)
+{
+    $id = platform_db_product_id_get($product->nid);
+
+    platform_db_product_update($id, $product);
+
+    drupal_set_message(
+            'Updated ' . $product->title . ' ' .
+            '(ID ' . $id . ')');
+}
+
+function platform_db_product_remove($node)
+{
+    $id = platform_db_product_id_get($node->nid);
+
+    platform_db_product_node_delete($id, $node->nid);
+    platform_db_product_delete($id);
+
+    drupal_set_message('Deleted the product (ID ' . $id . ')');
+}
+
+function platform_db_product_insert($product)
 {
     db_set_active('platform');
 
@@ -66,7 +98,7 @@ function platform_db_product_id_get($nid)
     }
 }
 
-function platform_db_product_edit($id, $product)
+function platform_db_product_update($id, $product)
 {
     db_set_active('platform');
 
@@ -87,7 +119,7 @@ function platform_db_product_edit($id, $product)
     db_set_active();
 }
 
-function platform_db_product_node_remove($id, $nid)
+function platform_db_product_node_delete($id, $nid)
 {
     db_set_active();
 
@@ -99,7 +131,7 @@ function platform_db_product_node_remove($id, $nid)
     db_set_active();
 }
 
-function platform_db_product_remove($id)
+function platform_db_product_delete($id)
 {
     db_set_active('platform');
 

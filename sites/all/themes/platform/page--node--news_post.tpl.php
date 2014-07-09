@@ -22,7 +22,7 @@ else
     $page_height = 342;
 }
 
-$news_post = platform_get_news_post($node);
+$news_post = platform_node_news_post_get($node);
 ?>
 <!DOCTYPE html>
 <html>
@@ -63,7 +63,7 @@ $news_post = platform_get_news_post($node);
         <div class="page_container">
             <div class="page_offset_container">
                 <div class="product_img_container">
-                    <img class="product_img" src="<?php print $news_post->product_image_url; ?>" />
+                    <img class="product_img" src="<?php print $news_post->product->image_url; ?>" />
                 </div>
                 <div style="width: 284px">
                     <h1><?php print $news_post->subtitle ? $news_post->subtitle : $news_post->title; ?></h1>
