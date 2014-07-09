@@ -1,6 +1,7 @@
 <?php
 
-module_load_include('php', 'platform', 'db_fun');
+module_load_include('php', 'platform', 'dao_category');
+module_load_include('php', 'platform', 'dao_product');
 module_load_include('php', 'platform', 'node_fun');
 
 /**
@@ -88,6 +89,18 @@ function platform_update_product($node)
             '(ID ' . $id . ')');
 }
 
+function platform_delete_product($node)
+{
+    $id = platform_db_product_id_get($node->nid);
+
+    platform_db_product_node_remove($id, $node->nid);
+    platform_db_product_remove($id);
+
+    drupal_set_message(
+            'Deleted the product ' .
+            '(ID ' . $id . ')');
+}
+
 function platform_insert_news_post($node)
 {
     $news_post = platform_get_news_post($node);
@@ -128,6 +141,25 @@ function platform_node_update($node)
         {
             case 'product':
                 platform_update_product($node);
+                break;
+            default:
+                break;
+        }
+    }
+    catch (Exception $e)
+    {
+        drupal_set_message($e->getMessage(), 'error');
+    }
+}
+
+function platform_node_delete($node)
+{
+    try
+    {
+        switch($node->type)
+        {
+            case 'product':
+                platform_delete_product($node);
                 break;
             default:
                 break;

@@ -1,19 +1,9 @@
 <?php
 
-function platform_db_category_add($form_values)
-{
-    db_set_active('platform');
-
-    $id = db_insert('category')
-        ->fields(array(
-            'name' => $form_values['name'],
-        ))
-        ->execute();
-
-    db_set_active();
-
-    return $id;
-}
+/**
+ * IMPORTANT: YOU MUST END EVERY DB FUNCTION WITH db_set_active(),
+ * ELSE FUTURE DB CALLS MAY UNWITTINGLY USE THE WRONG DATABASE.
+ */
 
 function platform_db_product_add($product)
 {
@@ -50,6 +40,8 @@ function platform_db_product_node($id, $nid)
             'node_id' => $nid
         ))
         ->execute();
+
+    db_set_active();
 }
 
 function platform_db_product_id_get($nid)
@@ -61,7 +53,17 @@ function platform_db_product_id_get($nid)
         ->condition('pn.node_id', $nid)
         ->execute()
         ->fetchObject();
-    return $record->product_id;
+
+    db_set_active();
+
+    if (is_object($record))
+    {
+        return $record->product_id;
+    }
+    else
+    {
+        throw Exception('Product for node ' . $nid . ' not in platform DB!');
+    }
 }
 
 function platform_db_product_edit($id, $product)
@@ -78,6 +80,32 @@ function platform_db_product_edit($id, $product)
             'image_height' => $product->image_height,
             'description' => $product->description,
             'is_hidden' => $product->is_hidden,
+        ))
+        ->condition('id', $id)
+        ->execute();
+
+    db_set_active();
+}
+
+function platform_db_product_node_remove($id, $nid)
+{
+    db_set_active();
+
+    db_delete('platform.product_node')
+        ->condition('product_id', $id)
+        ->condition('node_id', $nid)
+        ->execute();
+
+    db_set_active();
+}
+
+function platform_db_product_remove($id)
+{
+    db_set_active('platform');
+
+    db_update('product')
+        ->fields(array(
+            'is_deleted' => true,
         ))
         ->condition('id', $id)
         ->execute();
