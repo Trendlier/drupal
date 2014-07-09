@@ -39,10 +39,11 @@ function platform_node_quiz_get($node)
 {
     $quiz = new stdClass();
     $quiz->nid = $node->nid;
-    $quiz->quiz_type_id = get_field_value($node, 'field_quiz_type');
+    $quiz->type_id = get_field_value($node, 'field_quiz_type');
     $quiz->category_id = get_field_value($node, 'field_category');
     $quiz->title = $node->title;
     $quiz->total_points = get_field_value($node, 'field_total_points');
+    $quiz->is_hidden = get_field_value($node, 'field_hidden');
 
     $quiz->questions = platform_entity_quiz_questions_get($node);
 
@@ -57,6 +58,8 @@ function platform_entity_quiz_questions_get($node)
     foreach ($question_items as $question_item)
     {
         $questions[] = $question = new stdClass();
+        $question->entity_id =
+            entity_id('field_collection_item', $question_item);
         $question->text =
             get_field_collection_item_value($question_item, 'field_text');
 
@@ -81,7 +84,8 @@ function platform_entity_quiz_possible_answers_get(
     foreach ($answer_items as $answer_item)
     {
         $possible_answers[] = $answer = new stdClass();
-        $answer->text =
+        $answer->entity_id = entity_id('field_collection_item', $answer_item);
+        $answer->answer_text =
             get_field_collection_item_value(
                 $answer_item,
                 'field_answer_text'
