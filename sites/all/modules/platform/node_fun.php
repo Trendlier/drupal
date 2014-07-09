@@ -17,7 +17,7 @@ function platform_get_product($node)
     $product->image_width = get_field_value($node, 'field_image_width');
     $product->image_height = get_field_value($node, 'field_image_height');
     $product->description = get_field_text($node, 'field_description');
-    $product->is_hidden = get_field_text($node, 'field_hidden');
+    $product->is_hidden = get_field_value($node, 'field_hidden');
     return $product;
 }
 
@@ -28,6 +28,7 @@ function platform_get_news_post($node)
     $news_post->subtitle = get_field_text($node, 'field_subtitle');
     $news_post->text = get_field_text($node, 'field_text');
     $news_post->body = $node->body;
+    $news_post->is_hidden = get_field_value($node, 'field_hidden');
 
     $product_nid = get_field_node_reference($node, 'field_product');
     $product_node = node_load($product_nid);

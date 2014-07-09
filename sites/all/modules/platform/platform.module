@@ -1,5 +1,6 @@
 <?php
 
+module_load_include('php', 'platform', 'db_fun');
 module_load_include('php', 'platform', 'node_fun');
 
 /**
@@ -46,16 +47,7 @@ function platform_add_category_form_submit($form, &$form_state)
 {
     try
     {
-        db_set_active('platform');
-
-        $id = db_insert('category')
-            ->fields(array(
-                'name' => $form_state['values']['name'],
-            ))
-            ->execute();
-
-        db_set_active();
-
+        $id = platform_db_category_add($form_state['values']);
         drupal_set_message(
             'Added ' . $form_state['values']['name'] . ' ' .
             '(ID ' . $id . ')');
@@ -75,43 +67,71 @@ function platform_insert_product($node)
 
     $product = platform_get_product($node);
 
-    db_set_active('platform');
-
-    $now = new DateTime('now', new DateTimeZone('UTC'));
-
-    $id = db_insert('product')
-        ->fields(array(
-            'title' => $product->title,
-            'category_id' => $product->category_id,
-            'subtitle' => $product->subtitle,
-            'image_url' => $product->image_url,
-            'image_width' => $product->image_width,
-            'image_height' => $product->image_height,
-            'description' => $product->description,
-            'is_hidden' => $product->is_hidden,
-            'created_utc' => $now->format('c'),
-        ))
-        ->execute();
-
-    db_set_active();
+    $id = platform_db_product_add($product);
 
     drupal_set_message(
             'Added ' . $product->title . ' ' .
             '(ID ' . $id . ')');
 
-    db_insert('platform.product_node')
-        ->fields(array(
-            'product_id' => $id,
-            'node_id' => $node->nid
-        ))
-        ->execute();
+    platform_db_product_node($id, $node->nid);
+}
+
+function platform_update_product($node)
+{
+    $product = platform_get_product($node);
+    $id = platform_db_product_id_get($node->nid);
+
+    platform_db_product_edit($id, $product);
+
+    drupal_set_message(
+            'Updated ' . $product->title . ' ' .
+            '(ID ' . $id . ')');
+}
+
+function platform_insert_news_post($node)
+{
+    $news_post = platform_get_news_post($node);
+
+    $id = platform_db_news_post_add($news_post);
+
+    drupal_set_message(
+            'Added ' . $news_post->title . ' ' .
+            '(ID ' . $id . ')');
+
+    platform_db_news_post_node($id, $node->nid);
 }
 
 function platform_node_insert($node)
 {
     try
     {
-        platform_insert_product($node);
+        switch($node->type)
+        {
+            case 'product':
+                platform_insert_product($node);
+                break;
+            default:
+                break;
+        }
+    }
+    catch (Exception $e)
+    {
+        drupal_set_message($e->getMessage(), 'error');
+    }
+}
+
+function platform_node_update($node)
+{
+    try
+    {
+        switch($node->type)
+        {
+            case 'product':
+                platform_update_product($node);
+                break;
+            default:
+                break;
+        }
     }
     catch (Exception $e)
     {
