@@ -50,7 +50,6 @@ $news_post = platform_node_news_post_get($node);
                 top: -<?php print $page_offset; ?>px;
             }
             .product_img_container {
-                max-height: 148px;
                 overflow: hidden;
             }
             .product_img {
