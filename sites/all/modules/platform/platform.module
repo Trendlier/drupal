@@ -91,9 +91,11 @@ function platform_node_insert($node)
             case 'news_post':
                 $news_post = platform_node_news_post_get($node);
                 platform_db_news_post_add($news_post);
+                break;
             case 'quiz':
                 $quiz = platform_node_quiz_get($node);
                 platform_db_quiz_add($quiz);
+                break;
             default:
                 break;
         }

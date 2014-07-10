@@ -19,6 +19,11 @@ function platform_db_product_add($product)
 function platform_db_product_edit($product)
 {
     $id = platform_db_product_id_get($product->nid);
+    if (is_null($id))
+    {
+        throw new Exception(
+            'Product for node ' . $nid . ' not in platform DB!');
+    }
 
     platform_db_product_update($id, $product);
 
@@ -30,6 +35,11 @@ function platform_db_product_edit($product)
 function platform_db_product_remove($node)
 {
     $id = platform_db_product_id_get($node->nid);
+    if (is_null($id))
+    {
+        throw new Exception(
+            'Product for node ' . $nid . ' not in platform DB!');
+    }
 
     platform_db_product_node_delete($id, $node->nid);
     platform_db_product_delete($id);
@@ -94,8 +104,7 @@ function platform_db_product_id_get($nid)
     }
     else
     {
-        throw new Exception(
-            'Product for node ' . $nid . ' not in platform DB!');
+        return null;
     }
 }
 

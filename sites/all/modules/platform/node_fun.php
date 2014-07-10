@@ -19,6 +19,7 @@ function platform_node_news_post_get($node)
 {
     $news_post = new stdClass();
     $news_post->nid = $node->nid;
+    $news_post->category_id = get_field_value($node, 'field_category');
     $news_post->news_post_type_id =
         get_field_value($node, 'field_news_post_type');
     $news_post->title = $node->title;
@@ -27,10 +28,26 @@ function platform_node_news_post_get($node)
     $news_post->excerpt = get_field_text($node, 'field_excerpt');
     $news_post->is_hidden = get_field_value($node, 'field_hidden');
 
+    try
+    {
+        $news_post->image_url = get_field_image_url($node, 'field_image');
+    }
+    catch (Exception $e)
+    {
+        $news_post->image_url = null;
+    }
+
     // Pull information about the product from the product node
-    $product_nid = get_field_node_reference($node, 'field_product');
-    $product_node = node_load($product_nid);
-    $news_post->product = platform_node_product_get($product_node);
+    try
+    {
+        $product_nid = get_field_node_reference($node, 'field_product');
+        $product_node = node_load($product_nid);
+        $news_post->product = platform_node_product_get($product_node);
+    }
+    catch (Exception $e)
+    {
+        $news_post->product = null;
+    }
 
     return $news_post;
 }

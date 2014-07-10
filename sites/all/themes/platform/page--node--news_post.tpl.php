@@ -52,8 +52,9 @@ $news_post = platform_node_news_post_get($node);
             .product_img_container {
                 overflow: hidden;
             }
-            .product_img {
+            img {
                 max-width: 296px;
+                max-height: 160px;
                 height: auto;
             }
         </style>
@@ -61,9 +62,16 @@ $news_post = platform_node_news_post_get($node);
     <body>
         <div class="page_container">
             <div class="page_offset_container">
-                <div class="product_img_container">
-                    <img class="product_img" src="<?php print $news_post->product->image_url; ?>" />
-                </div>
+                <?php if (!is_null($news_post->product)): ?>
+                    <div class="product_img_container">
+                        <img class="product_img" src="<?php print $news_post->product->image_url; ?>" />
+                    </div>
+                <?php endif; ?>
+                <?php if (!is_null($news_post->image_url)): ?>
+                    <div class="product_img_container">
+                        <img class="product_img" src="<?php print $news_post->image_url; ?>" />
+                    </div>
+                <?php endif; ?>
                 <div style="width: 284px">
                     <h1><?php print $news_post->subtitle ? $news_post->subtitle : $news_post->title; ?></h1>
                     <p><?php print $news_post->text; ?></p>

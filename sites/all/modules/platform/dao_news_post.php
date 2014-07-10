@@ -7,7 +7,15 @@
 
 function platform_db_news_post_add($news_post)
 {
-    $product_id = platform_db_product_id_get($news_post->product->nid);
+    if (is_object($news_post->product))
+    {
+        $product_id = platform_db_product_id_get($news_post->product->nid);
+    }
+    else
+    {
+        $product_id = null;
+    }
+
     $id = platform_db_news_post_insert($news_post, $product_id);
 
     drupal_set_message(
@@ -19,7 +27,15 @@ function platform_db_news_post_add($news_post)
 
 function platform_db_news_post_edit($news_post)
 {
-    $product_id = platform_db_product_id_get($news_post->product->nid);
+    if (is_object($news_post->product))
+    {
+        $product_id = platform_db_product_id_get($news_post->product->nid);
+    }
+    else
+    {
+        $product_id = null;
+    }
+
     $id = platform_db_news_post_id_get($news_post->nid);
 
     platform_db_news_post_update($id, $news_post, $product_id);
@@ -47,7 +63,7 @@ function platform_db_news_post_insert($news_post, $product_id)
 
     $id = db_insert('news_post')
         ->fields(array(
-            'category_id' => $news_post->product->category_id,
+            'category_id' => $news_post->category_id,
             'news_post_type_id' => $news_post->news_post_type_id,
             'title' => $news_post->title,
             'subtitle' => $news_post->subtitle,
@@ -105,7 +121,7 @@ function platform_db_news_post_update($id, $news_post, $product_id)
 
     db_update('news_post')
         ->fields(array(
-            'category_id' => $news_post->product->category_id,
+            'category_id' => $news_post->category_id,
             'news_post_type_id' => $news_post->news_post_type_id,
             'title' => $news_post->title,
             'subtitle' => $news_post->subtitle,
