@@ -101,7 +101,7 @@ function get_field_text($node, $field_name)
 {
     $field_text_items = field_get_items('node', $node, $field_name);
     $field_text = '';
-    if (!is_null($field_text_items))
+    if (is_array($field_text_items))
     {
         foreach ($field_text_items as &$field_text_item)
         {
@@ -114,7 +114,7 @@ function get_field_text($node, $field_name)
 function get_field_value($node, $field_name)
 {
     $items = field_get_items('node', $node, $field_name);
-    if (!is_null($items))
+    if (is_array($items))
     {
         foreach ($items as &$item)
         {
@@ -130,9 +130,12 @@ function get_field_value($node, $field_name)
 function get_field_node_reference($node, $field_name)
 {
     $field_items = field_get_items('node', $node, $field_name);
-    foreach ($field_items as $item)
+    if (is_array($field_items))
     {
-        return $item['nid'];
+        foreach ($field_items as $item)
+        {
+            return $item['nid'];
+        }
     }
     throw new Exception('Unexpected error');
 }
@@ -140,12 +143,15 @@ function get_field_node_reference($node, $field_name)
 function get_field_image_url($node, $field_name)
 {
     $field_items = field_get_items('node', $node, $field_name);
-    foreach ($field_items as $item)
+    if (is_array($field_items))
     {
-        if (array_key_exists('fid', $item))
+        foreach ($field_items as $item)
         {
-            $file = file_load($item['fid']);
-            return file_create_url($file->uri);
+            if (array_key_exists('fid', $item))
+            {
+                $file = file_load($item['fid']);
+                return file_create_url($file->uri);
+            }
         }
     }
     throw new Exception(
@@ -169,12 +175,14 @@ function get_field_collection_items(
         $field_items = field_get_items('node', $entity, $field_name);
     }
     $field_collection_items = array();
-    foreach ($field_items as $item_id)
+    if (is_array($field_items))
     {
-        $field_collection_items[] =
-            field_collection_field_get_entity($item_id);
+        foreach ($field_items as $item_id)
+        {
+            $field_collection_items[] =
+                field_collection_field_get_entity($item_id);
+        }
     }
-
     return $field_collection_items;
 }
 
@@ -182,7 +190,7 @@ function get_field_collection_item_value($field_collection_item, $field_name)
 {
     $items = field_get_items(
         'field_collection_item', $field_collection_item, $field_name);
-    if (!is_null($items))
+    if (is_array($items))
     {
         foreach ($items as &$item)
         {
