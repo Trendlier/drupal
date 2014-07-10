@@ -54,7 +54,6 @@ $news_post = platform_node_news_post_get($node);
             }
             img {
                 max-width: 296px;
-                max-height: 160px;
                 height: auto;
             }
         </style>
