@@ -5,31 +5,24 @@
  * ELSE FUTURE QUERIES MAY UNWITTINGLY USE THE WRONG DATABASE.
  */
 
-function platform_db_product_add($product)
-{
-    $id = platform_db_product_insert($product);
-
-    drupal_set_message(
-            'Added ' . $product->title . ' ' .
-            '(ID ' . $id . ')');
-
-    platform_db_product_node($id, $product->nid);
-}
-
-function platform_db_product_edit($product)
+function platform_db_product_add_edit($product)
 {
     $id = platform_db_product_id_get($product->nid);
     if (is_null($id))
     {
-        throw new Exception(
-            'Product for node ' . $nid . ' not in platform DB!');
+        $id = platform_db_product_insert($product);
+        drupal_set_message(
+                'Added ' . $product->title . ' ' .
+                '(ID ' . $id . ')');
+        platform_db_product_node($id, $product->nid);
     }
-
-    platform_db_product_update($id, $product);
-
-    drupal_set_message(
-            'Updated ' . $product->title . ' ' .
-            '(ID ' . $id . ')');
+    else
+    {
+        platform_db_product_update($id, $product);
+        drupal_set_message(
+                'Updated ' . $product->title . ' ' .
+                '(ID ' . $id . ')');
+    }
 }
 
 function platform_db_product_remove($node)
@@ -38,7 +31,7 @@ function platform_db_product_remove($node)
     if (is_null($id))
     {
         throw new Exception(
-            'Product for node ' . $nid . ' not in platform DB!');
+            'Product for node ' . $node->nid . ' not in platform DB!');
     }
 
     platform_db_product_node_delete($id, $node->nid);

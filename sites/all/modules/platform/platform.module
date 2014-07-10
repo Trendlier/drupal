@@ -86,11 +86,11 @@ function platform_node_insert($node)
         {
             case 'product':
                 $product = platform_node_product_get($node);
-                platform_db_product_add($product);
+                platform_db_product_add_edit($product);
                 break;
             case 'news_post':
                 $news_post = platform_node_news_post_get($node);
-                platform_db_news_post_add($news_post);
+                platform_db_news_post_add_edit($news_post);
                 break;
             case 'quiz':
                 $quiz = platform_node_quiz_get($node);
@@ -121,11 +121,11 @@ function platform_node_update($node)
         {
             case 'product':
                 $product = platform_node_product_get($node);
-                platform_db_product_edit($product);
+                platform_db_product_add_edit($product);
                 break;
             case 'news_post':
                 $news_post = platform_node_news_post_get($node);
-                platform_db_news_post_edit($news_post);
+                platform_db_news_post_add_edit($news_post);
                 break;
             case 'quiz':
                 $quiz = platform_node_quiz_get($node);

@@ -5,27 +5,7 @@
  * ELSE FUTURE QUERIES MAY UNWITTINGLY USE THE WRONG DATABASE.
  */
 
-function platform_db_news_post_add($news_post)
-{
-    if (is_object($news_post->product))
-    {
-        $product_id = platform_db_product_id_get($news_post->product->nid);
-    }
-    else
-    {
-        $product_id = null;
-    }
-
-    $id = platform_db_news_post_insert($news_post, $product_id);
-
-    drupal_set_message(
-            'Added ' . $news_post->title . ' ' .
-            '(ID ' . $id . ')');
-
-    platform_db_news_post_node($id, $news_post->nid);
-}
-
-function platform_db_news_post_edit($news_post)
+function platform_db_news_post_add_edit($news_post)
 {
     if (is_object($news_post->product))
     {
@@ -38,16 +18,31 @@ function platform_db_news_post_edit($news_post)
 
     $id = platform_db_news_post_id_get($news_post->nid);
 
-    platform_db_news_post_update($id, $news_post, $product_id);
-
-    drupal_set_message(
-            'Updated ' . $news_post->title . ' ' .
-            '(ID ' . $id . ')');
+    if (is_null($id))
+    {
+        $id = platform_db_news_post_insert($news_post, $product_id);
+        drupal_set_message(
+                'Added ' . $news_post->title . ' ' .
+                '(ID ' . $id . ')');
+        platform_db_news_post_node($id, $news_post->nid);
+    }
+    else
+    {
+        platform_db_news_post_update($id, $news_post, $product_id);
+        drupal_set_message(
+                'Updated ' . $news_post->title . ' ' .
+                '(ID ' . $id . ')');
+    }
 }
 
 function platform_db_news_post_remove($node)
 {
     $id = platform_db_news_post_id_get($node->nid);
+    if (is_null($id))
+    {
+        throw new Exception(
+            'News post for node ' . $node->nid . ' not in platform DB!');
+    }
 
     platform_db_news_post_node_delete($id, $node->nid);
     platform_db_news_post_delete($id);
@@ -111,7 +106,7 @@ function platform_db_news_post_id_get($nid)
     }
     else
     {
-        throw new Exception('News post for node ' . $nid . ' not in platform DB!');
+        return null;
     }
 }
 
