@@ -8,8 +8,9 @@ function platform_node_product_get($node)
     $product->title = $node->title;
     $product->subtitle = get_field_text($node, 'field_subtitle');
     $product->image_url = get_field_image_url($node, 'field_image');
-    $product->image_width = get_field_value($node, 'field_image_width');
-    $product->image_height = get_field_value($node, 'field_image_height');
+    $image_info = get_field_image_info($node, 'field_image');
+    $product->image_width = $image_info['width'];
+    $product->image_height = $image_info['height'];
     $product->description = get_field_text($node, 'field_description');
     $product->is_hidden = get_field_value($node, 'field_hidden');
     return $product;
@@ -168,6 +169,25 @@ function get_field_image_url($node, $field_name)
             {
                 $file = file_load($item['fid']);
                 return file_create_url($file->uri);
+            }
+        }
+    }
+    throw new Exception(
+        'fid missing on ' . $node->nid . '/' . $field_name . ' ' .
+        'or URI missing on file');
+}
+
+function get_field_image_info($node, $field_name)
+{
+    $field_items = field_get_items('node', $node, $field_name);
+    if (is_array($field_items))
+    {
+        foreach ($field_items as $item)
+        {
+            if (array_key_exists('fid', $item))
+            {
+                $file = file_load($item['fid']);
+                return image_get_info(drupal_realpath($file->uri));
             }
         }
     }
