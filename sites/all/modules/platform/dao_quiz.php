@@ -5,34 +5,36 @@
  * ELSE FUTURE QUERIES MAY UNWITTINGLY USE THE WRONG DATABASE.
  */
 
-function platform_db_quiz_add($quiz)
+function platform_db_quiz_add_edit($quiz)
 {
-    $quiz_id = platform_db_quiz_insert($quiz);
+    $quiz_id = platform_db_quiz_id_get($quiz->nid);
 
-    drupal_set_message(
-            'Added Quiz ' . $quiz->title . ' ' .
-            '(ID ' . $quiz_id . ')');
-
-    platform_db_quiz_node($quiz_id, $quiz->nid);
-
-    foreach ($quiz->questions as $question)
+    if (is_null($quiz_id))
     {
-        platform_db_quiz_question_add($question, $quiz_id);
+        $quiz_id = platform_db_quiz_insert($quiz);
+        drupal_set_message(
+                'Added Quiz ' . $quiz->title . ' ' .
+                '(ID ' . $quiz_id . ')');
+        platform_db_quiz_node($quiz_id, $quiz->nid);
     }
-}
+    else
+    {
+        platform_db_quiz_update($quiz_id, $quiz);
+        drupal_set_message('Updated ' . $quiz->title . ' (ID ' . $quiz_id . ')');
+    }
 
-function platform_db_quiz_edit($quiz)
-{
-    $id = platform_db_quiz_id_get($quiz->nid);
-
-    platform_db_quiz_update($id, $quiz);
-
-    drupal_set_message('Updated ' . $quiz->title . ' (ID ' . $id . ')');
+    // Sync questions
+    platform_db_quiz_questions_add_edit($quiz->questions, $quiz_id);
 }
 
 function platform_db_quiz_remove($node)
 {
     $id = platform_db_quiz_id_get($node->nid);
+    if (is_null($id))
+    {
+        throw new Exception(
+            'Quiz for node ' . $node->nid . ' not in platform DB!');
+    }
 
     platform_db_quiz_node_delete($id, $node->nid);
     platform_db_quiz_delete($id);
@@ -94,7 +96,7 @@ function platform_db_quiz_id_get($nid)
     }
     else
     {
-        throw new Exception('Quiz for node ' . $nid . ' not in platform DB!');
+        return null;
     }
 }
 

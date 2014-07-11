@@ -13,6 +13,10 @@ module_load_include('php', 'platform', 'node_fun');
  */
 
 /**
+ * Implements hook_theme
+ */
+
+/**
  * Implements hook_menu
  */
 function platform_menu()
@@ -94,7 +98,7 @@ function platform_node_insert($node)
                 break;
             case 'quiz':
                 $quiz = platform_node_quiz_get($node);
-                platform_db_quiz_add($quiz);
+                platform_db_quiz_add_edit($quiz);
                 break;
             default:
                 break;
@@ -129,7 +133,7 @@ function platform_node_update($node)
                 break;
             case 'quiz':
                 $quiz = platform_node_quiz_get($node);
-                platform_db_quiz_edit($quiz);
+                platform_db_quiz_add_edit($quiz);
                 break;
             default:
                 break;

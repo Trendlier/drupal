@@ -5,7 +5,11 @@
  * ELSE FUTURE QUERIES MAY UNWITTINGLY USE THE WRONG DATABASE.
  */
 
-function platform_db_quiz_possible_answer_add($answer, $question_id)
+function platform_db_quiz_possible_answers_add_edit($answer, $question_id)
+{
+}
+
+function platform_db_quiz_possible_answer_add_edit($answer, $question_id)
 {
     $answer_id =
         platform_db_quiz_possible_answer_insert($answer, $question_id);
