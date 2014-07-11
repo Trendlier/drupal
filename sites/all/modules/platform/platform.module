@@ -13,6 +13,21 @@ module_load_include('php', 'platform', 'node_fun');
  */
 
 /**
+ * Implements hook_theme
+ */
+
+function platform_theme($existing, $type, $theme, $path)
+{
+  return array(
+    'news_post_node_form' => array(
+      'render element' => 'form',
+      'template' => 'page--node--edit--news_page',
+      'path' => drupal_get_path('theme', 'platform'),
+    ),
+  );
+}
+
+/**
  * Implements hook_menu
  */
 function platform_menu()
@@ -50,6 +65,18 @@ function platform_add_category_form($form, &$form_state)
         ),
     );
 }
+
+
+/**
+ * Implements hook_form_alter().
+ *
+ */
+function platform_form_alter(&$form, &$form_state, $form_id) {
+    if (!empty($form['#node_edit_form'])) { 
+        drupal_add_js(drupal_get_path('module', 'platform') . '/newspostpreview.js');
+    } 
+}
+
 
 /**
  * Called when platform/add_category_form gets submitted
