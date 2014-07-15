@@ -33,6 +33,9 @@ function platform_db_news_post_add_edit($news_post)
                 'Updated ' . $news_post->title . ' ' .
                 '(ID ' . $id . ')');
     }
+
+    // Maintain page URLs
+    platform_db_news_article_pages_set($news_post, $id);
 }
 
 function platform_db_news_post_remove($node)

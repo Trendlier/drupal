@@ -40,6 +40,17 @@ function platform_node_news_post_get($node)
 
     $news_post->info = platform_node_news_post_info_get($node);
 
+    // Generate page URLs
+    $num_pages = get_field_value($node, 'field_pages');
+    $news_post->page_url_array = array();
+    $page_url = url('node/' . $news_post->nid, array('absolute' => true));
+    $url_delim = (strpos($page_url, '?') === false) ? '?' : '&';
+    for ($n = 1; $n <= $num_pages; $n = $n + 1)
+    {
+        $news_post->page_url_array[] =
+            $page_url . $url_delim . 'page=' . $n;
+    }
+
     // Pull information about the product from the product node
     try
     {
