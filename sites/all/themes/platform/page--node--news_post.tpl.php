@@ -13,8 +13,10 @@ module_load_include('php', 'platform', 'node_fun');
 if (array_key_exists('page', $_GET))
 {
     $page_number = $_GET['page'];
-    $page_offset = ($page_number > 1 ? 19: 0) + ($page_number - 1) * 323;
-    $page_height = ($page_number == 1 ? 342 : 323);
+//    $page_offset = ($page_number > 1 ? 19: 0) + ($page_number - 1) * 323;
+//    $page_height = ($page_number == 1 ? 342 : 323);
+    $page_offset = ($page_number - 1) * 323;
+    $page_height =  342;
 }
 else
 {
