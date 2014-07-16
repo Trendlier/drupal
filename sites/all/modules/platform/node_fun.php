@@ -23,6 +23,7 @@ function platform_node_news_post_get($node)
     $news_post->category_id = get_field_value($node, 'field_category');
     $news_post->news_post_type_id =
         get_field_value($node, 'field_news_post_type');
+    $news_post->heading = get_field_value($node, 'field_heading');
     $news_post->title = $node->title;
     $news_post->subtitle = get_field_text($node, 'field_subtitle');
     $news_post->text = get_field_text($node, 'field_text');

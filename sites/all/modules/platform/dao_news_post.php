@@ -63,6 +63,7 @@ function platform_db_news_post_insert($news_post, $product_id)
         ->fields(array(
             'category_id' => $news_post->category_id,
             'news_post_type_id' => $news_post->news_post_type_id,
+            'heading' => $news_post->heading,
             'title' => $news_post->title,
             'subtitle' => $news_post->subtitle,
             'text' => $news_post->excerpt,
@@ -121,6 +122,7 @@ function platform_db_news_post_update($id, $news_post, $product_id)
         ->fields(array(
             'category_id' => $news_post->category_id,
             'news_post_type_id' => $news_post->news_post_type_id,
+            'heading' => $news_post->heading,
             'title' => $news_post->title,
             'subtitle' => $news_post->subtitle,
             'text' => $news_post->excerpt,
