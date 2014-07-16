@@ -5,7 +5,6 @@ function platform_node_product_get($node)
     $product = new stdClass();
     $product->nid = $node->nid;
     $product->category_id = get_field_value($node, 'field_category');
-    $product->subcategory_id = get_field_value($node, 'field_subcategory');
     $product->title = $node->title;
     $product->subtitle = get_field_text($node, 'field_subtitle');
     $product->image_url = get_field_image_url($node, 'field_image');
@@ -22,9 +21,9 @@ function platform_node_news_post_get($node)
     $news_post = new stdClass();
     $news_post->nid = $node->nid;
     $news_post->category_id = get_field_value($node, 'field_category');
-    $news_post->subcategory_id = get_field_value($node, 'field_subcategory');
     $news_post->news_post_type_id =
         get_field_value($node, 'field_news_post_type');
+    $news_post->heading = get_field_value($node, 'field_heading');
     $news_post->title = $node->title;
     $news_post->subtitle = get_field_text($node, 'field_subtitle');
     $news_post->text = get_field_text($node, 'field_text');
@@ -47,8 +46,7 @@ function platform_node_news_post_get($node)
     $url_delim = (strpos($page_url, '?') === false) ? '?' : '&';
     for ($n = 1; $n <= $num_pages; $n = $n + 1)
     {
-        $news_post->page_url_array[] =
-            urldecode($page_url . $url_delim . 'page=' . $n);
+        $news_post->page_url_array[] = $page_url . $url_delim . 'page=' . $n;
     }
 
     // Pull information about the product from the product node
