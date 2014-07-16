@@ -38,8 +38,6 @@ function platform_node_news_post_get($node)
         $news_post->image_url = null;
     }
 
-    $news_post->info = platform_node_news_post_info_get($node);
-
     // Generate page URLs
     $num_pages = get_field_value($node, 'field_pages');
     $news_post->page_url_array = array();
@@ -64,30 +62,6 @@ function platform_node_news_post_get($node)
     }
 
     return $news_post;
-}
-
-function platform_node_news_post_info_get($node)
-{
-    $info_items =
-        get_field_collection_items($node, 'field_news_post_info');
-    $info = array();
-    foreach ($info_items as $info_item)
-    {
-        $info[] = $inf = new stdClass();
-        $inf->entity_id = entity_id('field_collection_item', $info_item);
-        $inf->news_post_info_name_id =
-            get_field_collection_item_value(
-                $info_item,
-                'field_news_post_info_name'
-            );
-        $inf->news_post_info_value_id =
-            get_field_collection_item_value(
-                $info_item,
-                'field_news_post_info_value'
-            );
-    }
-
-    return $info;
 }
 
 function platform_node_quiz_get($node)

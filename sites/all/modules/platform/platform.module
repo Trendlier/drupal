@@ -3,7 +3,6 @@
 module_load_include('php', 'platform', 'dao_category');
 module_load_include('php', 'platform', 'dao_product');
 module_load_include('php', 'platform', 'dao_news_post');
-module_load_include('php', 'platform', 'dao_news_post_info');
 module_load_include('php', 'platform', 'dao_news_article_page');
 module_load_include('php', 'platform', 'dao_quiz');
 module_load_include('php', 'platform', 'dao_quiz_question');
