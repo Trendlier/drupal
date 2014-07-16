@@ -48,7 +48,7 @@ function platform_node_news_post_get($node)
     for ($n = 1; $n <= $num_pages; $n = $n + 1)
     {
         $news_post->page_url_array[] =
-            $page_url . $url_delim . 'page=' . $n;
+            urldecode($page_url . $url_delim . 'page=' . $n);
     }
 
     // Pull information about the product from the product node
@@ -205,7 +205,7 @@ function get_field_image_url($node, $field_name)
             if (array_key_exists('fid', $item))
             {
                 $file = file_load($item['fid']);
-                return file_create_url($file->uri);
+                return urldecode(file_create_url($file->uri));
             }
         }
     }
@@ -224,7 +224,13 @@ function get_field_image_info($node, $field_name)
             if (array_key_exists('fid', $item))
             {
                 $file = file_load($item['fid']);
-                return image_get_info(drupal_realpath($file->uri));
+                $image_info = image_get_info(drupal_realpath($file->uri));
+                if (strpos($file->filename, '@2x') !== false)
+                {
+                    $image_info['width'] = (int)($image_info['width'] / 2);
+                    $image_info['height'] = (int)($image_info['height'] / 2);
+                }
+                return $image_info;
             }
         }
     }

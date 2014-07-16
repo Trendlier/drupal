@@ -65,8 +65,7 @@ $news_post = platform_node_news_post_get($node);
                     <div class="product_img_container">
                         <img class="product_img" src="<?php print $news_post->product->image_url; ?>" />
                     </div>
-                <?php endif; ?>
-                <?php if (!is_null($news_post->image_url)): ?>
+                <?php elseif (!is_null($news_post->image_url)): ?>
                     <div class="product_img_container">
                         <img class="product_img" src="<?php print $news_post->image_url; ?>" />
                     </div>
