@@ -16,6 +16,9 @@ function displayPreview(){
     var title = "<h1>"+$("#edit-title").val()+"</h1>";
     var mainImage = $(".image-preview")[0].innerHTML;
     
+   mainImage.replace("/styles/thumbnail/public","");
+   mainImage.replace(' width="100"','');
+   mainImage.replace('height=','');
     
     
     $($(".content")[0]).append('<div id="newspostpreview"></div>');
