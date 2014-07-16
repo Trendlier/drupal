@@ -15,7 +15,7 @@ if (array_key_exists('page', $_GET))
     $page_number = $_GET['page'];
 //    $page_offset = ($page_number > 1 ? 19: 0) + ($page_number - 1) * 323;
 //    $page_height = ($page_number == 1 ? 342 : 323);
-    $page_offset = ($page_number - 1) * 323;
+    $page_offset = ($page_number - 1) * 342;
     $page_height =  342;
 }
 else
@@ -72,7 +72,7 @@ $news_post = platform_node_news_post_get($node);
                         <img class="product_img" src="<?php print $news_post->image_url; ?>" />
                     </div>
                 <?php endif; ?>
-                <div style="width: 284px">
+                <div >
                     <h1><?php print $news_post->subtitle ? $news_post->subtitle : $news_post->title; ?></h1>
                     <p><?php print $news_post->text; ?></p>
                 </div>
