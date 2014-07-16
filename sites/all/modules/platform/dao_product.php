@@ -50,6 +50,7 @@ function platform_db_product_insert($product)
         ->fields(array(
             'title' => $product->title,
             'category_id' => $product->category_id,
+            'subcategory_id' => $product->subcategory_id,
             'subtitle' => $product->subtitle,
             'image_url' => $product->image_url,
             'image_width' => $product->image_width,
@@ -109,6 +110,7 @@ function platform_db_product_update($id, $product)
         ->fields(array(
             'title' => $product->title,
             'category_id' => $product->category_id,
+            'subcategory_id' => $product->subcategory_id,
             'subtitle' => $product->subtitle,
             'image_url' => $product->image_url,
             'image_width' => $product->image_width,

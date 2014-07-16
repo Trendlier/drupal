@@ -5,6 +5,7 @@ function platform_node_product_get($node)
     $product = new stdClass();
     $product->nid = $node->nid;
     $product->category_id = get_field_value($node, 'field_category');
+    $product->subcategory_id = get_field_value($node, 'field_subcategory');
     $product->title = $node->title;
     $product->subtitle = get_field_text($node, 'field_subtitle');
     $product->image_url = get_field_image_url($node, 'field_image');
@@ -21,6 +22,7 @@ function platform_node_news_post_get($node)
     $news_post = new stdClass();
     $news_post->nid = $node->nid;
     $news_post->category_id = get_field_value($node, 'field_category');
+    $news_post->subcategory_id = get_field_value($node, 'field_subcategory');
     $news_post->news_post_type_id =
         get_field_value($node, 'field_news_post_type');
     $news_post->title = $node->title;
@@ -37,8 +39,6 @@ function platform_node_news_post_get($node)
     {
         $news_post->image_url = null;
     }
-
-    $news_post->info = platform_node_news_post_info_get($node);
 
     // Generate page URLs
     $num_pages = get_field_value($node, 'field_pages');
@@ -64,30 +64,6 @@ function platform_node_news_post_get($node)
     }
 
     return $news_post;
-}
-
-function platform_node_news_post_info_get($node)
-{
-    $info_items =
-        get_field_collection_items($node, 'field_news_post_info');
-    $info = array();
-    foreach ($info_items as $info_item)
-    {
-        $info[] = $inf = new stdClass();
-        $inf->entity_id = entity_id('field_collection_item', $info_item);
-        $inf->news_post_info_name_id =
-            get_field_collection_item_value(
-                $info_item,
-                'field_news_post_info_name'
-            );
-        $inf->news_post_info_value_id =
-            get_field_collection_item_value(
-                $info_item,
-                'field_news_post_info_value'
-            );
-    }
-
-    return $info;
 }
 
 function platform_node_quiz_get($node)
