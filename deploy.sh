@@ -6,4 +6,4 @@
 SERVER="$1"
 FOLDER="$2"
 BRANCH="$3"
-ssh "$SERVER" "cd $FOLDER && git pull origin $BRANCH"
+ssh "$SERVER" "cd $FOLDER && git pull -f origin $BRANCH"
