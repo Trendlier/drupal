@@ -1,5 +1,6 @@
 <?php
 
+module_load_include('php', 'platform', 'node_fun');
 module_load_include('php', 'platform', 'dao_category');
 module_load_include('php', 'platform', 'dao_product');
 module_load_include('php', 'platform', 'dao_news_post');
@@ -7,7 +8,7 @@ module_load_include('php', 'platform', 'dao_news_article_page');
 module_load_include('php', 'platform', 'dao_quiz');
 module_load_include('php', 'platform', 'dao_quiz_question');
 module_load_include('php', 'platform', 'dao_quiz_possible_answer');
-module_load_include('php', 'platform', 'node_fun');
+module_load_include('php', 'platform', 's3');
 
 /**
  * Trendlier platform hooks for Drupal
@@ -100,7 +101,7 @@ function platform_node_insert($node)
                 platform_db_product_add_edit($product);
                 break;
             case 'news_post':
-                $news_post = platform_node_news_post_get($node);
+                $news_post = platform_node_news_post_get($node, true);
                 platform_db_news_post_add_edit($news_post);
                 break;
             case 'quiz':
@@ -135,7 +136,7 @@ function platform_node_update($node)
                 platform_db_product_add_edit($product);
                 break;
             case 'news_post':
-                $news_post = platform_node_news_post_get($node);
+                $news_post = platform_node_news_post_get($node, true);
                 platform_db_news_post_add_edit($news_post);
                 break;
             case 'quiz':
