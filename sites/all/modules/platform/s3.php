@@ -4,7 +4,7 @@ require_once(DRUPAL_ROOT . '/sites/all/libraries/aws-sdk-php/aws-autoloader.php'
 
 use Aws\S3\S3Client;
 
-function platform_s3_upload_page($drupal_page_url, $nid)
+function platform_s3_upload_page($drupal_page_url, $nid, $n)
 {
     $IMGS = 'JPG|jpg|JPEG|jpeg|PNG|png|GIF|gif';
     $page_data = file_get_contents($drupal_page_url);
@@ -15,9 +15,10 @@ function platform_s3_upload_page($drupal_page_url, $nid)
             $key = $matches[1];
             $resource_url = $matches[0];
             $body = file_get_contents($resource_url);
+            $content_type = 'image/' . $matches[2];
             try
             {
-                return platform_s3_upload_file($key, $body);
+                return platform_s3_upload_file($key, $body, $content_type);
             }
             catch (Exception $e)
             {
@@ -26,11 +27,12 @@ function platform_s3_upload_page($drupal_page_url, $nid)
         },
         $page_data
     );
-    $key = 'news_post_node_' . $nid;
+    $key = 'news_post_node_' . $nid . '_' . $n . '.html';
     $body = $page_data;
+    $content_type = 'text/html';
     try
     {
-        return platform_s3_upload_file($key, $body);
+        return platform_s3_upload_file($key, $body, $content_type);
     }
     catch(Exception $e)
     {
@@ -38,7 +40,7 @@ function platform_s3_upload_page($drupal_page_url, $nid)
     }
 }
 
-function platform_s3_upload_file($key, $body)
+function platform_s3_upload_file($key, $body, $content_type)
 {
     $options = array(
         'key' => variable_get('aws_key'),
@@ -52,6 +54,8 @@ function platform_s3_upload_file($key, $body)
         'Bucket' => 'trendliercmsbucket',
         'Key' => $key,
         'Body' => $body,
+        'ACL' => 'public-read',
+        'ContentType' => $content_type,
     ));
 
     return $result['ObjectURL'];

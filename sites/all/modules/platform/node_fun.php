@@ -66,7 +66,8 @@ function platform_node_news_post_get($node, $only_for_render=false)
         $news_post->page_url_array[] =
             platform_s3_upload_page(
                 $page_url . $url_delim . 'page=' . $n,
-                $node->nid
+                $node->nid,
+                $n
             );
     }
 
