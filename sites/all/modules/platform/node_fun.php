@@ -16,7 +16,7 @@ function platform_node_product_get($node)
     return $product;
 }
 
-function platform_node_news_post_get($node, $only_for_render=false)
+function platform_node_news_post_get($node, $only_for_add_edit=false)
 {
     $news_post = new stdClass();
     $news_post->nid = $node->nid;
@@ -51,7 +51,7 @@ function platform_node_news_post_get($node, $only_for_render=false)
         $news_post->product = null;
     }
 
-    if ($only_for_render)
+    if (!$only_for_add_edit)
     {
         return $news_post;
     }

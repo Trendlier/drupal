@@ -101,7 +101,7 @@ function platform_node_insert($node)
                 platform_db_product_add_edit($product);
                 break;
             case 'news_post':
-                $news_post = platform_node_news_post_get($node);
+                $news_post = platform_node_news_post_get($node, true);
                 platform_db_news_post_add_edit($news_post);
                 break;
             case 'quiz':
@@ -136,7 +136,7 @@ function platform_node_update($node)
                 platform_db_product_add_edit($product);
                 break;
             case 'news_post':
-                $news_post = platform_node_news_post_get($node);
+                $news_post = platform_node_news_post_get($node, true);
                 platform_db_news_post_add_edit($news_post);
                 break;
             case 'quiz':

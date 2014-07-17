@@ -4,10 +4,22 @@ require_once(DRUPAL_ROOT . '/sites/all/libraries/aws-sdk-php/aws-autoloader.php'
 
 use Aws\S3\S3Client;
 
+function platform_s3_render_node($nid, $n)
+{
+    $node = node_load($nid);
+    $_GET['page'] = $n;
+    ob_start();
+    require(DRUPAL_ROOT . '/sites/all/themes/platform/page--node--news_post.tpl.php');
+    $output = ob_get_contents();
+    ob_clean();
+    return $output;
+}
+
 function platform_s3_upload_page($drupal_page_url, $nid, $n)
 {
     $IMGS = 'JPG|jpg|JPEG|jpeg|PNG|png|GIF|gif';
-    $page_data = file_get_contents($drupal_page_url);
+    //$page_data = file_get_contents($drupal_page_url);
+    $page_data = platform_s3_render_node($nid, $n);
     $page_data = preg_replace_callback(
         '/http:\/\/[^\/]+\/drupal\/[^"]+\/files\/([^"]+\.(' . $IMGS . '))/',
         function($matches)
