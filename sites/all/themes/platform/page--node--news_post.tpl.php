@@ -50,9 +50,9 @@ $news_post = platform_node_news_post_get($node);
             .page_offset_container {
                 position: relative;
                 height: 342px;
-                -webkit-column-gap: 10px;
-                -moz-column-gap: 10px;
-                column-gap: 10px;
+                -webkit-column-gap: 4px;
+                -moz-column-gap: 4px;
+                column-gap: 4px;
                 -webkit-column-width: 296px;
                 -moz-column-width: 296px;
                 column-width: 296px;
