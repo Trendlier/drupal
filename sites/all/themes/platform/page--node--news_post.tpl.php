@@ -56,7 +56,7 @@ $news_post = platform_node_news_post_get($node);
                 -webkit-column-width: 296px;
                 -moz-column-width: 296px;
                 column-width: 296px;
-                right: -<?php print $page_offset; ?>px;
+                right: <?php print $page_offset; ?>px;
             }
             .product_img_container {
                 overflow: hidden;
