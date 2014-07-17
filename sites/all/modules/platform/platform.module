@@ -29,6 +29,16 @@ function platform_menu()
     );
 }
 
+/**
+ * Implements hook_form_alter().
+ *
+ */
+function platform_form_alter(&$form, &$form_state, $form_id) {
+    if (!empty($form['#node_edit_form'])) { 
+        drupal_add_js(drupal_get_path('module', 'platform') . '/newspostpreview.js');
+    } 
+}
+
 function platform_add_category_form($form, &$form_state)
 {
     return array(
@@ -51,18 +61,6 @@ function platform_add_category_form($form, &$form_state)
         ),
     );
 }
-
-
-/**
- * Implements hook_form_alter().
- *
- */
-function platform_form_alter(&$form, &$form_state, $form_id) {
-    if (!empty($form['#node_edit_form'])) { 
-        drupal_add_js(drupal_get_path('module', 'platform') . '/newspostpreview.js');
-    } 
-}
-
 
 /**
  * Called when platform/add_category_form gets submitted
