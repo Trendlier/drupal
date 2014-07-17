@@ -1,5 +1,6 @@
 <?php
 
+module_load_include('php', 'platform', 'node_fun');
 module_load_include('php', 'platform', 'dao_category');
 module_load_include('php', 'platform', 'dao_product');
 module_load_include('php', 'platform', 'dao_news_post');
@@ -7,7 +8,7 @@ module_load_include('php', 'platform', 'dao_news_article_page');
 module_load_include('php', 'platform', 'dao_quiz');
 module_load_include('php', 'platform', 'dao_quiz_question');
 module_load_include('php', 'platform', 'dao_quiz_possible_answer');
-module_load_include('php', 'platform', 'node_fun');
+module_load_include('php', 'platform', 's3');
 
 /**
  * Trendlier platform hooks for Drupal

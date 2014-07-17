@@ -16,7 +16,7 @@ function platform_node_product_get($node)
     return $product;
 }
 
-function platform_node_news_post_get($node)
+function platform_node_news_post_get($node, $only_for_render=false)
 {
     $news_post = new stdClass();
     $news_post->nid = $node->nid;
@@ -39,16 +39,6 @@ function platform_node_news_post_get($node)
         $news_post->image_url = null;
     }
 
-    // Generate page URLs
-    $num_pages = get_field_value($node, 'field_pages');
-    $news_post->page_url_array = array();
-    $page_url = url('node/' . $news_post->nid, array('absolute' => true));
-    $url_delim = (strpos($page_url, '?') === false) ? '?' : '&';
-    for ($n = 1; $n <= $num_pages; $n = $n + 1)
-    {
-        $news_post->page_url_array[] = $page_url . $url_delim . 'page=' . $n;
-    }
-
     // Pull information about the product from the product node
     try
     {
@@ -59,6 +49,25 @@ function platform_node_news_post_get($node)
     catch (Exception $e)
     {
         $news_post->product = null;
+    }
+
+    if ($only_for_render)
+    {
+        return $news_post;
+    }
+
+    // Generate page URLs
+    $num_pages = get_field_value($node, 'field_pages');
+    $news_post->page_url_array = array();
+    $page_url = url('node/' . $news_post->nid, array('absolute' => true));
+    $url_delim = (strpos($page_url, '?') === false) ? '?' : '&';
+    for ($n = 1; $n <= $num_pages; $n = $n + 1)
+    {
+        $news_post->page_url_array[] =
+            platform_s3_upload_page(
+                $page_url . $url_delim . 'page=' . $n,
+                $node->nid
+            );
     }
 
     return $news_post;

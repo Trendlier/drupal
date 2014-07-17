@@ -24,7 +24,7 @@ else
     $page_height = 342;
 }
 
-$news_post = platform_node_news_post_get($node);
+$news_post = platform_node_news_post_get($node, $only_for_render=true);
 ?>
 <!DOCTYPE html>
 <html>
