@@ -15,7 +15,7 @@ if (array_key_exists('page', $_GET))
     $page_number = $_GET['page'];
 //    $page_offset = ($page_number > 1 ? 19: 0) + ($page_number - 1) * 323;
 //    $page_height = ($page_number == 1 ? 342 : 323);
-    $page_offset = ($page_number - 1) * 342;
+    $page_offset = ($page_number - 1) * 300 - ($page_number > 1 ? 0: 0);
     $page_height =  342;
 }
 else
@@ -42,14 +42,21 @@ $news_post = platform_node_news_post_get($node);
             .page_container {
                 position: relative;
                 overflow: hidden;
-                height: <?php print $page_height; ?>px;
+                height: 342px;
                 width: 296px;
                 margin: auto;
                 line-height: 19px;
             }
             .page_offset_container {
                 position: relative;
-                top: -<?php print $page_offset; ?>px;
+                height: 342px;
+                -webkit-column-gap: 10px;
+                -moz-column-gap: 10px;
+                column-gap: 10px;
+                -webkit-column-width: 296px;
+                -moz-column-width: 296px;
+                column-width: 296px;
+                right: -<?php print $page_offset; ?>px;
             }
             .product_img_container {
                 overflow: hidden;
