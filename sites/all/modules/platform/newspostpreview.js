@@ -18,13 +18,13 @@ function displayPreview(){
 
     var mainImage = $(".image-preview")[0];
     $(mainImage).css({'max-width': '296px'});
-    mainImage = mainImage.innerHTML;   
-
- 
-    mainImage = mainImage.replace("/styles/thumbnail/public","");
-    mainImage = mainImage.replace(' width="100"','style=\'max-width:296px;\'');
-    mainImage = mainImage.replace('height=',''); 
-       
+    
+    if(mainImage != null){
+        mainImage = mainImage.innerHTML;  
+        mainImage = mainImage.replace("/styles/thumbnail/public","");
+        mainImage = mainImage.replace(' width="100"','style=\'max-width:296px;\'');
+        mainImage = mainImage.replace('height=',''); 
+    }
     $($(".content")[0]).append('<div id="newspostpreview"><div style="width:296px"></div></div>');
     
     $("#newspostpreview").css({'width':'100%', 'height':'342px','-webkit-column-gap':'10px',
